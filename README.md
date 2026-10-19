@@ -312,7 +312,8 @@ the game.
 | **PlayStation 2** | Beta | ✓ disc or ELF | EE-GCC 2.96 | ✓ export | ✓ |
 | **Game Boy Advance** | Beta | ✓ ROM | agbcc | ✓ export | ✓ |
 | **Nintendo DS** | Beta | ✓ ROM (.nds) | CodeWarrior for DS 1.2 – DSi 1.6 | ✓ ds-decomp | ✓ |
-| **3DS · PSP · Switch · PC · Xbox · Xbox 360** | coming | | | | ✓ |
+| **PC (Windows)** | Beta | ✓ `.exe` / `.dll` (PE) | MSVC · MinGW-w64 GCC *(auto-detected)* | ✓ export | ✓ |
+| **3DS · PSP · Switch · Xbox · Xbox 360** | coming | | | | ✓ |
 
 **Recommended platforms: GameCube, Wii and Nintendo 64.** They're the most tested path from dropping in a game to a
 full decomp you can port and mod:
@@ -340,6 +341,12 @@ calls, including code run through the TLB and code Rare and Nintendo shipped com
 2 overlays in a disc's other files. Every attempt is
 compiled with the game's compiler and checked byte for byte: linked at its address in the original (MIPS, ARM)
 or judged by objdiff inside the project's own build (GameCube, Wii, DS).
+
+**Automatic compiler detection.** When you drop in a Windows PC program, decomp.wtf reads its
+Portable Executable (PE) header to work out the compiler before picking a toolchain. The MSVC
+*Rich header* (`@comp.id`) pins the exact Visual C++ version (6.0 through 2022); without it, GCC/MinGW
+section markers (`.CRT`, `.bss`, `.debug_*`) and the Optional Header's linker version are used as
+fallbacks. The guess maps to a default toolchain (`msvc`, or `mingw-gcc`), which you can still override.
 
 **The base for ports and mods.** *Export project* writes a normal decomp tree (matched functions as C, the rest as
 assembly from splat or luvdis, a linker script and `build.py`) and proves it rebuilds your game byte for byte.
@@ -378,7 +385,7 @@ uv run pytest
 
 | Path | What it is |
 | :-- | :-- |
-| `src/decompnet/rom/` | ROM reading (`n64.py`, `psx.py`), splitting with splat (`split.py`), the symbol table and the matcher (`match.py`). |
+| `src/decompnet/rom/` | ROM and PC-program reading (`n64.py`, `psx.py`, `pe.py`), splitting with splat (`split.py`), the symbol table and the matcher (`match.py`). |
 | `src/decompnet/app/` | The app: `engine.py` (ROM projects), `forkengine.py` (forks of public decomps), `tools.py` (MCP tools and agent prompt), `agents.py` (running agents), `server.py` (GUI API and MCP), `collab.py` (rooms), `static/` (GUI), `guide/` (agent know-how). |
 | `src/decompnet/forks/` | Fork mode: the decomp.dev catalog, project detection and setup, objdiff, source editing, m2c and Ghidra drafts, linking and file splits for dtk-template projects (`project.py`, `dtksplits.py`), and data diffs (`datadiff.py`). |
 | `src/decompnet/network.py` | The coordination core the engine builds on: claims, attempts, notes, the shared header. |

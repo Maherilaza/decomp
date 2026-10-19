@@ -507,3 +507,32 @@ description = "Game Boy Advance disassembler: finds the functions in a ROM and w
 git = "https://github.com/aarant/luvdis"
 commit = "ec3a4e3ee3afe3e9b4a9c7ae8fffc65e1ea2096c"
 pip_extra = ["setuptools<70"]
+
+# ------------------------------------------------------------------------------------------------
+# PC (Windows) compilers. Matched against a program's Rich header / linker version by rom/pe.py.
+
+["msvc"]
+name = "Microsoft Visual C++ (MSVC)"
+platform = "PC"
+arch = "x86"
+license = "proprietary"
+source = "operator-provided Visual C++ build tools"
+description = "Microsoft's C/C++ compiler, the one most Windows games shipped with. Proprietary: the operator installs it (or runs the pinned community build through wibo) and accepts its license."
+requires = ["wibo"]
+cc = ["{tc}/bin/cl.exe", "/c", "/Fo{obj}", "{src}"]
+flags = ["/O2", "/Gy"]
+
+["mingw-gcc"]
+name = "MinGW-w64 GCC (Windows target)"
+platform = "PC"
+arch = "x86_64"
+license = "GPL-3.0"
+source = "niXman/mingw-builds-binaries 14.2.0"
+description = "GCC that produces Windows PE binaries, for programs built with the open-source MinGW toolchain."
+cc = ["{tc}/bin/x86_64-w64-mingw32-gcc", "-c", "-o", "{obj}", "{src}"]
+flags = ["-O2"]
+[["mingw-gcc".parts]]
+url = "https://github.com/niXman/mingw-builds-binaries/releases/download/14.2.0-rt_v12-rev0/x86_64-14.2.0-release-posix-seh-ucrt-rt_v12-rev0.7z"
+sha256 = ""  # pin on first install
+subdir = "mingw64"
+platforms = ["linux-x86_64", "windows-x86_64"]

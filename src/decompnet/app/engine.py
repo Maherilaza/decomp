@@ -30,6 +30,7 @@ from ..rom import detect, match, split
 from ..rom.symbols import AUTO_NAME, IDENT, Symbol, SymbolTable
 
 DEFAULT_TOOLCHAIN = {"KMC": "gcc-2.7.2-kmc", "IDO": "ido-7.1", "PSYQ": "gcc-2.7.2-psx", "EEGCC": "ee-gcc-2.96",
+                     "MSVC": "msvc", "MINGW": "mingw-gcc",
                      "AGBCC": "agbcc"}
 # How ready each platform is for a full decomp you can port and mod; the GUI and the README show it.
 # recommended: the most tested path, from import to a project that builds the game (GameCube and Wii: the same kind
